@@ -140,10 +140,6 @@
 {
     [self setStream];
     
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    NSString *hostName = [defaults stringForKey:kTBXMPPUserHost];
-//    NSString *userName = [NSString stringWithFormat:@"%@@%@",[defaults stringForKey:kTBXMPPUserName],hostName];
-    
     NSString *myJID = [[LoginUser sharedLoginUser] myJIDName];
     NSString *hostName = [[LoginUser sharedLoginUser] hostName];
     
@@ -183,7 +179,6 @@
 - (void)xmppStreamDidConnect:(XMPPStream *)sender
 {
     NSLog(@"%s",__FUNCTION__);
-//    NSString *userPassword = [[NSUserDefaults standardUserDefaults] stringForKey:kTBXMPPUserPassword];
     NSString *userPassword = [[LoginUser sharedLoginUser] password];
     if (_isRegister) {
         [_xmppStream registerWithPassword:userPassword error:nil];

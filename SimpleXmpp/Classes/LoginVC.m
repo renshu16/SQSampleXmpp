@@ -106,10 +106,7 @@
         [alter show];
         return;
     }
-//    
-//    [userName saveToNSDefaultsWithKey:kTBXMPPUserName];
-//    [password saveToNSDefaultsWithKey:kTBXMPPUserPassword];
-//    [hostName saveToNSDefaultsWithKey:kTBXMPPUserHost];
+
     [[LoginUser sharedLoginUser] setUserName:userName];
     [[LoginUser sharedLoginUser] setPassword:password];
     [[LoginUser sharedLoginUser] setHostName:hostName];
