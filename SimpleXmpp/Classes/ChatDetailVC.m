@@ -9,6 +9,7 @@
 #import "ChatDetailVC.h"
 #import "AppDelegate.h"
 #import "Public.h"
+#import "TBXmppManager.h"
 
 
 @interface ChatDetailVC ()
@@ -35,7 +36,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"lisi";
+    self.title = kFriendJid;
     
     [self initViews];
     [self initNotify];
@@ -89,7 +90,7 @@
 -(void)setupFetchedResultController
 {
     //数据存储上下文；定义查询请求； 定义排序； 定义查询条件(谓词，NSPredicate)； 实例化查询结果控制器
-    NSManagedObjectContext *context = [[[self appDelegate] xmppMessageArchivingCoreDataStorage] mainThreadManagedObjectContext];
+    NSManagedObjectContext *context = [[[TBXmppManager sharedInstance] xmppMessageArchivingCoreDataStorage] mainThreadManagedObjectContext];
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"XMPPMessageArchiving_Message_CoreDataObject"];
     
@@ -204,7 +205,7 @@
     XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:[XMPPJID jidWithString:toJidStr]];
     [message addBody:text];
     
-    [[[self appDelegate] xmppStream] sendElement:message];
+    [[[TBXmppManager sharedInstance] xmppStream] sendElement:message];
     
     textField.text = @"";
     return YES;

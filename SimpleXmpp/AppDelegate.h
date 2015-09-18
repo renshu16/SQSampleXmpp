@@ -7,32 +7,31 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "XMPPFramework.h"
 
 #import "LoginUser.h"
 #define kTBNotifyUserLoginState @"kTBNotifyUserLoginState"
-
-#define kFriendJid      @"lisi@wjmac.local"
-
-typedef void (^CompletionBlock)();
+//
+//#define kFriendJid      @"rensq@192.168.1.25"//@"lisi@wjmac.local"
+//
+//typedef void (^CompletionBlock)();
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 
-@property (strong, nonatomic, readonly)XMPPStream *xmppStream;
-@property (strong, nonatomic, readonly)XMPPRoster *xmppRoster;
-@property (strong, nonatomic, readonly)XMPPRosterCoreDataStorage *xmppRosterStorage;
-
-@property (strong, nonatomic, readonly)XMPPMessageArchiving *xmppMessageArchiving;
-@property (strong, nonatomic, readonly)XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;
+//@property (strong, nonatomic, readonly)XMPPStream *xmppStream;
+//@property (strong, nonatomic, readonly)XMPPRoster *xmppRoster;
+//@property (strong, nonatomic, readonly)XMPPRosterCoreDataStorage *xmppRosterStorage;
+//
+//@property (strong, nonatomic, readonly)XMPPMessageArchiving *xmppMessageArchiving;
+//@property (strong, nonatomic, readonly)XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;
 @property (assign, nonatomic) BOOL isRegister;
 @property (assign, nonatomic) BOOL isLogin;
-
--(void)connectWithCompletion:(CompletionBlock)completion failed:(CompletionBlock)failed;
-
--(void)disconnect;
+//
+//-(void)connectWithCompletion:(CompletionBlock)completion failed:(CompletionBlock)failed;
+//
+//-(void)disconnect;
 
 
 @end

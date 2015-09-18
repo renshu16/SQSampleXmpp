@@ -7,9 +7,11 @@
 //
 
 #import "MainVC.h"
+#import "LoginVC.h"
 #import "Public.h"
 #import "AppDelegate.h"
 #import "ChatDetailVC.h"
+#import "TBXmppManager.h"
 
 @interface MainVC ()
 {
@@ -31,16 +33,7 @@
     
     //self.view.backgroundColor = [UIColor yellowColor];
     self.title = @"主页";
-    
-    cellArr = [NSArray arrayWithObjects:@"聊天", @"注销",  nil];
-    
-    
-//    UIButton *logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    logoutBtn.bounds = CGRectMake(0, 0, ScreenWidth - 80, 44);
-//    logoutBtn.center = CGPointMake(ScreenWidth/2, ScreenHeight/2);
-//    [logoutBtn setTitle:@"注销" forState:UIControlStateNormal];
-//    [logoutBtn addTarget:self action:@selector(logoutClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:logoutBtn];
+    cellArr = [NSArray arrayWithObjects:@"聊天",@"登录", @"注销",  nil];
     
     
 
@@ -48,17 +41,17 @@
 
 -(void)logoutClick:(UIButton *)btn
 {
-    [self appDelegate].isLogin = NO;
+    //[self appDelegate].isLogin = NO;
     
-    [[self appDelegate] disconnect];
+    [[TBXmppManager sharedInstance] disconnect];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kTBNotifyUserLoginState object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTBNotifyUserLoginState object:[NSNumber numberWithBool:NO]];
 }
 
 #pragma mark - UITableViewDelegate
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return cellArr.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -75,10 +68,14 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger rowIndex = [indexPath row];
-    if (rowIndex == 0) {
+    if (rowIndex == 0 && [[self appDelegate] isLogin]) {
         ChatDetailVC *chatDetail = [[ChatDetailVC alloc]init];
         [self.navigationController pushViewController:chatDetail animated:YES];
-    }else if(rowIndex == 1){
+    }else if(rowIndex == 1 && ![[self appDelegate] isLogin]){
+        LoginVC *loginVc = [[LoginVC alloc]init];
+        [self.navigationController presentViewController:loginVc animated:YES completion:nil];
+    }
+    else if(rowIndex == 2 && [[self appDelegate] isLogin]){
         [self logoutClick:nil];
     }
 }

@@ -11,6 +11,7 @@
 #import "Public.h"
 #import "NSString+Helper.h"
 #import "LoginUser.h"
+#import "TBXmppManager.h"
 
 @interface LoginVC ()
 
@@ -36,6 +37,9 @@
 
 -(void)initViews
 {
+    
+    
+    
     CGFloat textWidth = ScreenWidth - 80;
     _userNameText = [[UITextField alloc]initWithFrame:CGRectMake(40, 60, textWidth, 44)];
     [_userNameText setBorderStyle:UITextBorderStyleRoundedRect];
@@ -106,11 +110,10 @@
         [alter show];
         return;
     }
-
+    
     [[LoginUser sharedLoginUser] setUserName:userName];
     [[LoginUser sharedLoginUser] setPassword:password];
     [[LoginUser sharedLoginUser] setHostName:hostName];
-    
     
     NSString *actionStr = @"";
     //登陆
@@ -123,10 +126,9 @@
         [self appDelegate].isRegister = YES;
     }
     
-    [[self appDelegate] connectWithCompletion:^{
+    [[TBXmppManager sharedInstance] connectWithCompletion:^{
         NSLog(@"%@ -- 成功",actionStr);
-        
-        [[NSNotificationCenter defaultCenter]postNotificationName:kTBNotifyUserLoginState object:nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:kTBNotifyUserLoginState object:[NSNumber numberWithBool:YES]];
     } failed:^{
         NSLog(@"%@ -- 失败",actionStr);
     }];

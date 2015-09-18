@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F90EEE891BABDB6500E38F7C /* TBXmppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F90EEE881BABDB6500E38F7C /* TBXmppManager.m */; };
 		F98A549E1BAA5ECF009B92CC /* ChatDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F98A549D1BAA5ECF009B92CC /* ChatDetailVC.m */; };
 		F98A54A11BAA605F009B92CC /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F98A54A01BAA605F009B92CC /* ChatCell.m */; };
 		F98A54A51BAA9379009B92CC /* LoginUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F98A54A41BAA9379009B92CC /* LoginUser.m */; };
@@ -178,6 +179,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F90EEE871BABDB6500E38F7C /* TBXmppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXmppManager.h; sourceTree = "<group>"; };
+		F90EEE881BABDB6500E38F7C /* TBXmppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXmppManager.m; sourceTree = "<group>"; };
 		F98A549C1BAA5ECF009B92CC /* ChatDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatDetailVC.h; sourceTree = "<group>"; };
 		F98A549D1BAA5ECF009B92CC /* ChatDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatDetailVC.m; sourceTree = "<group>"; };
 		F98A549F1BAA605F009B92CC /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
@@ -606,6 +609,8 @@
 				F9FAE0441BA6734B00E83E5B /* AppDelegate.m */,
 				F9FAE04E1BA6734B00E83E5B /* LaunchScreen.xib */,
 				F9FAE03F1BA6734B00E83E5B /* Supporting Files */,
+				F90EEE871BABDB6500E38F7C /* TBXmppManager.h */,
+				F90EEE881BABDB6500E38F7C /* TBXmppManager.m */,
 			);
 			path = SimpleXmpp;
 			sourceTree = "<group>";
@@ -1758,6 +1763,7 @@
 				F9FAE26A1BA67C0800E83E5B /* NSString+XEP_0106.m in Sources */,
 				F9FAE2701BA67C0800E83E5B /* XMPPMessageArchiving.xcdatamodeld in Sources */,
 				F9FAE1131BA67B8000E83E5B /* XMPPXOAuth2Google.m in Sources */,
+				F90EEE891BABDB6500E38F7C /* TBXmppManager.m in Sources */,
 				F9FAE24A1BA67C0800E83E5B /* XMPPRoomMemoryStorage.m in Sources */,
 				F9FAE11E1BA67B8000E83E5B /* XMPPPresence.m in Sources */,
 				F9FAE27A1BA67C0800E83E5B /* XMPPMessageDeliveryReceipts.m in Sources */,
