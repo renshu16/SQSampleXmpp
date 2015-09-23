@@ -14,6 +14,8 @@
 
 @interface ChatDetailVC ()
 {
+    NSString *_bareJid;
+    
     UITableView *mainTable;
     CGRect mainFrame;
     UIView *bottomBar;
@@ -32,11 +34,20 @@
     return [[UIApplication sharedApplication] delegate];
 }
 
+-(id)initWithJid:(NSString *)jid
+{
+    self = [super init];
+    if (self) {
+        _bareJid = jid;
+    }
+    return self;
+}
+
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = kFriendJid;
+    self.title = _bareJid;
     
     [self initViews];
     [self initNotify];
@@ -81,9 +92,19 @@
     bottomBar.backgroundColor = RGBCOLOR(237, 237, 237);
     [self.view addSubview:bottomBar];
     
-    inputText = [[UITextField alloc]initWithFrame:CGRectMake(kPadding, 2, bottomBar.frame.size.width - 2*kPadding, 40)];
+    CGFloat btnWidth = 40;
+    
+    inputText = [[UITextField alloc]initWithFrame:CGRectMake(kPadding, 2, bottomBar.frame.size.width - btnWidth - 3*kPadding, 40)];
     [inputText setBorderStyle:UITextBorderStyleRoundedRect];
     [inputText setDelegate:self];
+    
+    UIButton *addFileBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    addFileBtn.frame = CGRectMake(CGRectGetMaxX(inputText.frame) + kPadding, 2, btnWidth, btnWidth);
+    [addFileBtn setImage:[UIImage imageNamed:@"TypeSelectorBtn_Black"] forState:UIControlStateNormal];
+    [addFileBtn setImage:[UIImage imageNamed:@"TypeSelectorBtnHL_Black"] forState:UIControlStateHighlighted];
+    [addFileBtn addTarget:self action:@selector(addFileAction:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomBar addSubview:addFileBtn];
+    
     [bottomBar addSubview:inputText];
 }
 
@@ -96,7 +117,7 @@
     
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
     
-    NSString *bareJidStr = kFriendJid;
+    NSString *bareJidStr = _bareJid;
     NSString *myJidStr = [[LoginUser sharedLoginUser] myJIDName];
     request.predicate = [NSPredicate predicateWithFormat:@"bareJidStr CONTAINS[cd] %@ AND streamBareJidStr CONTAINS[cd] %@",bareJidStr, myJidStr];
     [request setSortDescriptors:@[sort]];
@@ -195,13 +216,57 @@
     [inputText resignFirstResponder];
 }
 
+#pragma mark - UIImagePickerDelegate
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = info[UIImagePickerControllerEditedImage];
+    [self dismissViewControllerAnimated:YES completion:^{
+        //发送文件Message
+        XMPPMessage *fileMessage = [XMPPMessage messageWithType:@"myImageData" to:[XMPPJID jidWithString:_bareJid]];
+        
+        NSData *data = UIImagePNGRepresentation(image);
+        NSString *msgStr = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        
+        NSXMLElement *fileElement = [NSXMLElement elementWithName:@"imageData" stringValue:msgStr];
+        [fileMessage addChild:fileElement];
+        [[TBXmppManager sharedInstance] sendXmppMessage:fileMessage];
+        NSLog(@"fileMessage -- %@",fileMessage);
+        /*
+         自定义message
+        <message type="myImageData" to="rensq@192.168.1.25">
+        <imageData>iVBORw0KG</imageData>
+        </message>
+        
+         官方xmpp Message
+        <message
+        xmlns="jabber:client" type="chat" id="purple46cbc480" to="zhangsan@192.168.1.25" from="rensq@192.168.1.25/wjmac">
+        <active xmlns="http://jabber.org/protocol/chatstates"/>
+        <body>222222222222</body>
+        </message>
+         */
+        
+    }];
+}
+
+#pragma mark - Action
+-(void)addFileAction:(UIButton *)btn
+{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [picker setDelegate:self];
+        [self presentViewController:picker animated:YES completion:nil];
+    }
+}
+
 #pragma mark - UITextField
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     NSString *text = [textField.text trimString];
     
-    NSString *toJidStr = kFriendJid;
+    NSString *toJidStr = _bareJid;
     XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:[XMPPJID jidWithString:toJidStr]];
     [message addBody:text];
     

@@ -107,7 +107,7 @@
     else if (rowIndex == 1 && [[self appDelegate] isLogin]) {
         //先添加好友，再进聊天列表
         
-        ChatDetailVC *chatDetail = [[ChatDetailVC alloc]init];
+        ChatDetailVC *chatDetail = [[ChatDetailVC alloc]initWithJid:kFriendJid];
         [self.navigationController pushViewController:chatDetail animated:YES];
     }else if(rowIndex == 2 && ![[self appDelegate] isLogin]){
         LoginVC *loginVc = [[LoginVC alloc]init];
