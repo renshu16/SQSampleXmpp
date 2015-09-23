@@ -21,9 +21,11 @@
     [center addObserver:self selector:@selector(loginStateChanged:) name:kTBNotifyUserLoginState object:nil];
 }
 
--(void)loginStateChanged:(NSNumber *)flag
+-(void)loginStateChanged:(NSNotification *)notify
 {
-    NSLog(@"%s --- %@",__FUNCTION__,flag);
+    NSDictionary *loginDic = [notify object];
+    NSString * flag = [loginDic objectForKey:kTBNotifyLoginKey];
+    NSLog(@"%s --- %@",__FUNCTION__, flag);
     _isLogin = [flag boolValue];
     
 }
@@ -32,6 +34,8 @@
     // Override point for customization after application launch.
 
     [self registerNotification];
+    
+    [[TBXmppManager sharedInstance] setupStream];
     
     UIViewController *rootVc = nil;
     //    if (_isLogin) {
@@ -47,22 +51,29 @@
     [self.window makeKeyAndVisible];
     
     
-    NSString *myJIDName = [[LoginUser sharedLoginUser] myJIDName];
-    if (![myJIDName isEmptyString]) {
-        [[TBXmppManager sharedInstance] connectWithCompletion:^{
-            //
-        } failed:^{
-            //
-        }];
-    }
+    
+    
+//    NSString *myJIDName = [[LoginUser sharedLoginUser] myJIDName];
+//    if (![myJIDName isEmptyString]) {
+//        [[TBXmppManager sharedInstance] connectWithCompletion:^{
+//            //
+//        } failed:^{
+//            //
+//        }];
+//    }
     
     return YES;
 }
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-}
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    NSLog(@"%s",__FUNCTION__);
+    [[TBXmppManager sharedInstance] connect];
+    
 }
+- (void)applicationWillResignActive:(UIApplication *)application {
+    NSLog(@"%s",__FUNCTION__);
+    [[TBXmppManager sharedInstance] disconnect];
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 }
 - (void)applicationWillEnterForeground:(UIApplication *)application {

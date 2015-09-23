@@ -14,17 +14,15 @@
     CompletionBlock _failedBlock;
     
     XMPPReconnect *_xmppReconnect;
+    
+    //NSMutableArray *_socketList;
 }
-
--(void)setStream;
 
 -(void)teardownStream;
 
 -(void)goOnline;
 
 -(void)goOffline;
-
--(void)connect;
 
 @end
 
@@ -37,8 +35,6 @@ static TBXmppManager *sharedManager;
     dispatch_once(&onceToken, ^{
         sharedManager=[[TBXmppManager alloc]init];
         //[DDLog addLogger:[DDTTYLogger sharedInstance]];
-
-        [sharedManager setStream];
         
     });
     return sharedManager;
@@ -84,21 +80,30 @@ static TBXmppManager *sharedManager;
 }
 
 #pragma mark - XMPP InnerMethod
--(void)setStream
+-(void)setupStream
 {
     if (_xmppStream != nil) {
         NSLog(@"XMPPStream 重复设置");
         return;
     }
     
-    _xmppStream = [[XMPPStream alloc]init];
-    [_xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+#if !TARGET_IPHONE_SIMULATOR
+    {
+        // 允许XMPPStream在真机运行时，支持后台网络通讯！
+        [_xmppStream setEnableBackgroundingOnSocket:YES];
+    }
+#endif
     
+    _xmppStream = [[XMPPStream alloc]init];
     
     _xmppReconnect = [[XMPPReconnect alloc]init];
     
+    //_socketList = [NSMutableArray array];
+    
     _xmppRosterStorage = [XMPPRosterCoreDataStorage sharedInstance];
     _xmppRoster = [[XMPPRoster alloc]initWithRosterStorage:_xmppRosterStorage];
+    [_xmppRoster setAutoAcceptKnownPresenceSubscriptionRequests:YES];//自动接收好友订阅请求
+    [_xmppRoster setAutoFetchRoster:YES];//自动刷新
     
     _xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
     _xmppMessageArchiving = [[XMPPMessageArchiving alloc]initWithMessageArchivingStorage:_xmppMessageArchivingCoreDataStorage];
@@ -107,6 +112,8 @@ static TBXmppManager *sharedManager;
     [_xmppRoster activate:_xmppStream];
     [_xmppMessageArchiving activate:_xmppStream];
     
+    [_xmppStream addDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    [_xmppRoster addDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
 }
 
 -(void)teardownStream
@@ -130,10 +137,18 @@ static TBXmppManager *sharedManager;
 
 -(void)connect
 {
-    //[self setStream];
+    if ([_xmppStream isConnected]) {
+        return;
+    }
     
     NSString *myJID = [[LoginUser sharedLoginUser] myJIDName];
     NSString *hostName = [[LoginUser sharedLoginUser] hostName];
+    
+    if ([myJID isEmptyString] || [hostName isEmptyString]) {
+        //第一次登录
+        
+        return;
+    }
     
     [_xmppStream setMyJID:[XMPPJID jidWithString:myJID]];
     [_xmppStream setHostName:hostName];
@@ -142,9 +157,6 @@ static TBXmppManager *sharedManager;
     [_xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&err];
     if (err) {
         NSLog(@"连接请求发送出错 - %@", err.localizedDescription);
-        if (_failedBlock) {
-            _failedBlock();
-        }
     } else {
         NSLog(@"连接请求发送成功！");
     }
@@ -189,6 +201,8 @@ static TBXmppManager *sharedManager;
     _isRegister = NO;
     //注册成功转 自动登陆
     [self xmppStreamDidConnect:_xmppStream];
+    
+    [_xmppStream authenticateWithPassword:[[LoginUser sharedLoginUser] password] error:nil];
 }
 
 #pragma mark 注册失败
@@ -197,7 +211,9 @@ static TBXmppManager *sharedManager;
     NSLog(@"%s",__FUNCTION__);
     _isRegister = NO;
     if (_failedBlock) {
-        _failedBlock();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _failedBlock();
+        });
     }
 }
 
@@ -205,9 +221,12 @@ static TBXmppManager *sharedManager;
 -(void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
     NSLog(@"%s",__FUNCTION__);
-    _isLogin = YES;
+    NSDictionary *loginDic = @{kTBNotifyLoginKey:@"1"};
+    [[NSNotificationCenter defaultCenter]postNotificationName:kTBNotifyUserLoginState object:loginDic];
     if (_completionBlock) {
-        _completionBlock();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _completionBlock();
+        });
     }
     
     [self goOnline];
@@ -236,6 +255,22 @@ static TBXmppManager *sharedManager;
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
     NSLog(@"接收到用户登陆的状态 - %@",presence);
+}
+
+- (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
+{
+    NSLog(@"didReceiveIQ - %@",iq);
+    
+    
+    return YES;
+}
+
+#pragma mark - XMPPRoster Delegate
+- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence
+{
+//    _xmppRoster rejectPresenceSubscriptionRequestFrom:<#(XMPPJID *)#>
+//    _xmppRoster acceptPresenceSubscriptionRequestFrom:<#(XMPPJID *)#> andAddToRoster:<#(BOOL)#>
+    NSLog(@"接收到来自%@的订阅请求",[presence from]);
 }
 
 

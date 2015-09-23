@@ -12,12 +12,17 @@
 #import "Public.h"
 
 #define kTBNotifyUserLoginState @"kTBNotifyUserLoginState"
+#define kTBNotifyLoginKey       @"login_key"
 
-#define kFriendJid      @"lisi@wjmac.local"
+//#define kFriendJid      @"lisi@wjmac.local"
+#define kFriendJid      @"rensq@192.168.1.25"
+
+//#define kHostName       @"wjmac.local"
+#define kHostName       @"192.168.1.25"
 
 typedef void (^CompletionBlock)();
 
-@interface TBXmppManager : NSObject<XMPPStreamDelegate>
+@interface TBXmppManager : NSObject<XMPPStreamDelegate,XMPPRosterDelegate>
 
 +(TBXmppManager *)sharedInstance;
 
@@ -35,6 +40,8 @@ typedef void (^CompletionBlock)();
 
 -(void)sendXmppMessage:(XMPPMessage *)message;
 
+-(void)setupStream;
+-(void)connect;
 -(void)disconnect;
 
 @end

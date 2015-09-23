@@ -63,7 +63,7 @@
     _hostNameText.backgroundColor = [UIColor whiteColor];
     [_hostNameText setPlaceholder:@"请输入主机名"];
     [_hostNameText setDelegate:self];
-    [_hostNameText setText:@"wjmac.local"];
+    [_hostNameText setText:kHostName];
     [self.view addSubview:_hostNameText];
     
     UIButton *loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -128,10 +128,23 @@
     
     [[TBXmppManager sharedInstance] connectWithCompletion:^{
         NSLog(@"%@ -- 成功",actionStr);
-        [[NSNotificationCenter defaultCenter]postNotificationName:kTBNotifyUserLoginState object:[NSNumber numberWithBool:YES]];
+        [self dismissViewControllerAnimated:YES completion:nil];
     } failed:^{
         NSLog(@"%@ -- 失败",actionStr);
+        
+        UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"提示" message:@"失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alter show];
+        
+        if (btn.tag == 1) {
+            // 注册用户失败通常是因为用户名重复
+            [_userNameText becomeFirstResponder];
+        } else {
+            // 登录失败通常是密码输入错误
+            [_userPasswordText setText:@""];
+            [_userPasswordText becomeFirstResponder];
+        }
     }];
+    
 }
 
 
