@@ -31,12 +31,28 @@
 {
     [super viewDidLoad];
     
+    [self registerNotify];
+    
     //self.view.backgroundColor = [UIColor yellowColor];
     self.title = @"主页";
-    cellArr = [NSArray arrayWithObjects:@"添加好友",@"聊天",@"登录", @"注销",  nil];
+    cellArr = [NSArray arrayWithObjects:@"添加好友",@"聊天",@"登录", @"注销",@"检查用户",@"request hello",@"发消息",  nil];
     
     
 
+}
+
+-(void)dealloc
+{
+    [self removeNotify];
+}
+
+-(void)registerNotify
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMessage:) name:kTBNotifyReceiveMsg object:nil];
+}
+-(void)removeNotify
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kTBNotifyReceiveMsg object:nil];
 }
 
 -(void)logoutClick:(UIButton *)btn
@@ -44,8 +60,8 @@
     //[self appDelegate].isLogin = NO;
     
     [[TBXmppManager sharedInstance] disconnect];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kTBNotifyUserLoginState object:[NSNumber numberWithBool:NO]];
+    NSDictionary *loginDic = @{kTBNotifyLoginKey:@"0"};
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTBNotifyUserLoginState object:loginDic];
 }
 
 #pragma mark - 添加好友
@@ -115,6 +131,35 @@
     }
     else if(rowIndex == 3 && [[self appDelegate] isLogin]){
         [self logoutClick:nil];
+    }
+    else if(rowIndex == 4){
+        [[TBXmppManager sharedInstance] checkUser:kFriendJid];
+    }
+    else if(rowIndex == 5){
+        [[TBXmppManager sharedInstance] requestHello:@"Hello from iOS"];
+    }
+    else if(rowIndex == 6){
+        [[TBXmppManager sharedInstance] sendTextMsg:@"{success:1}" toJID:kFriendJid];
+    }
+}
+
+#pragma mark - Notifycation
+-(void)didReceiveMessage:(NSNotification *)notify
+{
+    id msg = notify !=nil && notify.object !=nil ? [notify.object objectForKey:kTBNotifyMsgKey] : nil;
+    if (msg) {
+        XMPPMessage *message = (XMPPMessage *)msg;
+        
+        dispatch_queue_t mainQueue= dispatch_get_main_queue();
+        dispatch_sync(mainQueue, ^{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"来自openfire的消息"
+                                                            message:[NSString stringWithFormat:@"%@",message ]
+                                                           delegate:self
+                                                  cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+        });
+        
+
     }
 }
 

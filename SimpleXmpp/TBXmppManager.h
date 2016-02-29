@@ -14,11 +14,14 @@
 #define kTBNotifyUserLoginState @"kTBNotifyUserLoginState"
 #define kTBNotifyLoginKey       @"login_key"
 
-//#define kFriendJid      @"lisi@wjmac.local"
-#define kFriendJid      @"rensq@192.168.1.25"
+#define kTBNotifyReceiveMsg     @"kTBNotifyReceiveMsg"
+#define kTBNotifyMsgKey         @"kTBNotifyMsgKey"
+
+#define kFriendJid      @"lisi@192.168.1.140"
 
 //#define kHostName       @"wjmac.local"
-#define kHostName       @"192.168.1.25"
+//#define kHostName       @"192.168.1.25"
+#define kHostName       @"192.168.1.140"
 
 typedef void (^CompletionBlock)();
 
@@ -39,6 +42,9 @@ typedef void (^CompletionBlock)();
 -(void)connectWithCompletion:(CompletionBlock)completion failed:(CompletionBlock)failed;
 
 -(void)sendXmppMessage:(XMPPMessage *)message;
+-(void)sendTextMsg:(NSString *)message toJID:(NSString *)toJID;
+-(void)checkUser:(NSString*)userName;
+-(void)requestHello:(NSString *)sayStr;
 
 -(void)setupStream;
 -(void)connect;

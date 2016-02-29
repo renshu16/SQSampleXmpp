@@ -79,6 +79,43 @@ static TBXmppManager *sharedManager;
     
 }
 
+#pragma mark 发送消息给指定用户
+-(void)sendTextMsg:(NSString *)message toJID:(NSString *)toJID
+{
+    XMPPMessage *element = [XMPPMessage messageWithType:@"chat" to:[XMPPJID jidWithString:toJID]];
+    [element addBody:message];
+    
+    [[[TBXmppManager sharedInstance] xmppStream] sendElement:element];
+}
+
+#pragma mark 检查用户是否存在
+-(void)checkUser:(NSString*)userName
+{
+    NSXMLElement * query = [NSXMLElement elementWithName:@"query" xmlns:@"jabber:iq:tbauth"];
+    NSXMLElement * username = [NSXMLElement elementWithName:@"username"];
+    [username setStringValue:userName];
+    [query addChild:username];
+    [query addAttributeWithName:@"username" stringValue:userName];
+    NSXMLElement * iq = [NSXMLElement elementWithName:@"iq"];
+    [iq addAttributeWithName:@"type" stringValue:@"get"];
+    [iq addChild:query];
+    [_xmppStream sendElement:iq];
+}
+
+#pragma mark 扩展接口
+-(void)requestHello:(NSString *)sayStr
+{
+    NSXMLElement *query = [NSXMLElement elementWithName:@"query" xmlns:@"jabber:iq:tbhello"];
+    NSXMLElement *body = [NSXMLElement elementWithName:@"say"];
+    [body setStringValue:sayStr];
+    [query addChild:body];
+    [query addAttributeWithName:@"say" stringValue:sayStr];
+    NSXMLElement *iq = [NSXMLElement elementWithName:@"iq"];
+    [iq addAttributeWithName:@"type" stringValue:@"get"];
+    [iq addChild:query];
+    [_xmppStream sendElement:iq];
+}
+
 #pragma mark - XMPP InnerMethod
 -(void)setupStream
 {
@@ -181,6 +218,39 @@ static TBXmppManager *sharedManager;
     [_xmppStream sendElement:offPresence];
 }
 
++(NSString *)parseErrorCode:(DDXMLElement *)error
+{
+    NSString *errorCode = @"";
+    if (error) {
+        //解析errorCode
+        for (DDXMLElement *child in error.children) {
+            if ([child.name isEqualToString:@"error"]) {
+                errorCode = [[child attributeForName:@"code"] stringValue];
+                break;
+            }
+        }
+    }
+    return errorCode;
+}
+
++(BOOL)isUserAccountExistWithErrorCode:(NSString *)strCode
+{
+    if (strCode) {
+        return [strCode isEqualToString:@"409"];
+    }
+    return NO;
+}
+
++(BOOL)isUserAccountNotAuthorizedWith:(DDXMLElement *)error
+{
+    if (error && error.childCount > 0) {
+        for (DDXMLElement *child in error.children) {
+            return [child.name isEqualToString:@"not-authorized"];
+        }
+    }
+    return NO;
+}
+
 #pragma mark - XMPPDelegate
 #pragma mark 建立连接
 - (void)xmppStreamDidConnect:(XMPPStream *)sender
@@ -189,6 +259,19 @@ static TBXmppManager *sharedManager;
     NSString *userPassword = [[LoginUser sharedLoginUser] password];
     if (_isRegister) {
         [_xmppStream registerWithPassword:userPassword error:nil];
+        
+//        NSMutableArray *elements = [NSMutableArray array];
+//        [elements addObject:[NSXMLElement elementWithName:@"username" stringValue:@"venkat"]];
+//        [elements addObject:[NSXMLElement elementWithName:@"password" stringValue:@"dfds"]];
+//        [elements addObject:[NSXMLElement elementWithName:@"name" stringValue:@"eref defg"]];
+//        [elements addObject:[NSXMLElement elementWithName:@"accountType" stringValue:@"3"]];
+//        [elements addObject:[NSXMLElement elementWithName:@"deviceToken" stringValue:@"adfg3455bhjdfsdfhhaqjdsjd635n"]];
+//        
+//        [elements addObject:[NSXMLElement elementWithName:@"email" stringValue:@"abc@bbc.com"]];
+//        
+//        [_xmppStream registerWithElements:elements error:nil];
+        
+        
     }else{
         [_xmppStream authenticateWithPassword:userPassword error:nil];
     }
@@ -208,7 +291,8 @@ static TBXmppManager *sharedManager;
 #pragma mark 注册失败
 -(void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error
 {
-    NSLog(@"%s",__FUNCTION__);
+    NSLog(@"%s--%@",__FUNCTION__,error.description);
+    NSLog(@"error code = %@",[TBXmppManager parseErrorCode:error]);
     _isRegister = NO;
     if (_failedBlock) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -235,15 +319,23 @@ static TBXmppManager *sharedManager;
 #pragma mark 登陆失败
 -(void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error
 {
-    NSLog(@"%s",__FUNCTION__);
+    NSLog(@"%s -- error:%@",__FUNCTION__,error);
+    if ([TBXmppManager isUserAccountNotAuthorizedWith:error]) {
+        
+    }
     if (_failedBlock) {
-        _failedBlock();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _failedBlock();
+        });
     }
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
     NSLog(@"接收到用户消息 - %@", message);
+    
+    NSDictionary *msgDic = @{kTBNotifyMsgKey:message};
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTBNotifyReceiveMsg object:msgDic];
 }
 
 - (XMPPMessage *)xmppStream:(XMPPStream *)sender willReceiveMessage:(XMPPMessage *)message

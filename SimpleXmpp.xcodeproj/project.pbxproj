@@ -11,6 +11,9 @@
 		F98A549E1BAA5ECF009B92CC /* ChatDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F98A549D1BAA5ECF009B92CC /* ChatDetailVC.m */; };
 		F98A54A11BAA605F009B92CC /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F98A54A01BAA605F009B92CC /* ChatCell.m */; };
 		F98A54A51BAA9379009B92CC /* LoginUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F98A54A41BAA9379009B92CC /* LoginUser.m */; };
+		F9BEC2131BB8ED76001E9663 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F9BEC2121BB8ED76001E9663 /* libxml2.tbd */; };
+		F9BEC2151BB8ED87001E9663 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F9BEC2141BB8ED87001E9663 /* libresolv.tbd */; };
+		F9DF3FE81C84290D00F7705C /* HttpTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DF3FE71C84290D00F7705C /* HttpTool.m */; };
 		F9E09A0B1BA80452004D5F7D /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E09A0A1BA80452004D5F7D /* LoginVC.m */; };
 		F9E09A111BA81139004D5F7D /* MainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E09A101BA81139004D5F7D /* MainVC.m */; };
 		F9E09A191BA811F8004D5F7D /* NSArray+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E09A141BA811F8004D5F7D /* NSArray+Log.m */; };
@@ -31,7 +34,6 @@
 		F9FAE09B1BA6764400E83E5B /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = F9FAE07E1BA6764400E83E5B /* README.txt */; };
 		F9FAE0A31BA6769400E83E5B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FAE0A21BA6769400E83E5B /* Security.framework */; };
 		F9FAE0A51BA6769E00E83E5B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FAE0A41BA6769E00E83E5B /* CFNetwork.framework */; };
-		F9FAE0A71BA6775F00E83E5B /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FAE0A61BA6775F00E83E5B /* libxml2.dylib */; };
 		F9FAE0AB1BA678C000E83E5B /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE0AA1BA678C000E83E5B /* GCDAsyncSocket.m */; };
 		F9FAE0B91BA6792200E83E5B /* NSString+DDXML.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE0AF1BA6792200E83E5B /* NSString+DDXML.m */; };
 		F9FAE0BA1BA6792200E83E5B /* DDXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE0B21BA6792200E83E5B /* DDXMLDocument.m */; };
@@ -66,7 +68,6 @@
 		F9FAE1241BA67B8000E83E5B /* XMPPSRVResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE1071BA67B8000E83E5B /* XMPPSRVResolver.m */; };
 		F9FAE1251BA67B8000E83E5B /* XMPPStringPrep.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE1091BA67B8000E83E5B /* XMPPStringPrep.m */; };
 		F9FAE1261BA67B8000E83E5B /* XMPPTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE10B1BA67B8000E83E5B /* XMPPTimer.m */; };
-		F9FAE1281BA67BBC00E83E5B /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9FAE1271BA67BBC00E83E5B /* libresolv.dylib */; };
 		F9FAE22A1BA67C0800E83E5B /* XMPPBandwidthMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE12C1BA67C0700E83E5B /* XMPPBandwidthMonitor.m */; };
 		F9FAE22B1BA67C0800E83E5B /* XMPPCoreDataStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE12F1BA67C0700E83E5B /* XMPPCoreDataStorage.m */; };
 		F9FAE22C1BA67C0800E83E5B /* XMPPFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FAE1331BA67C0700E83E5B /* XMPPFileTransfer.m */; };
@@ -188,6 +189,10 @@
 		F98A54A21BAA9344009B92CC /* Singleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		F98A54A31BAA9379009B92CC /* LoginUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginUser.h; sourceTree = "<group>"; };
 		F98A54A41BAA9379009B92CC /* LoginUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginUser.m; sourceTree = "<group>"; };
+		F9BEC2121BB8ED76001E9663 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		F9BEC2141BB8ED87001E9663 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		F9DF3FE61C84290D00F7705C /* HttpTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpTool.h; sourceTree = "<group>"; };
+		F9DF3FE71C84290D00F7705C /* HttpTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpTool.m; sourceTree = "<group>"; };
 		F9E09A091BA80452004D5F7D /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		F9E09A0A1BA80452004D5F7D /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		F9E09A0E1BA80638004D5F7D /* Public.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Public.h; sourceTree = "<group>"; };
@@ -228,7 +233,6 @@
 		F9FAE07E1BA6764400E83E5B /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		F9FAE0A21BA6769400E83E5B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F9FAE0A41BA6769E00E83E5B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		F9FAE0A61BA6775F00E83E5B /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F9FAE0A91BA678C000E83E5B /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		F9FAE0AA1BA678C000E83E5B /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		F9FAE0AE1BA6792200E83E5B /* NSString+DDXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DDXML.h"; sourceTree = "<group>"; };
@@ -304,7 +308,6 @@
 		F9FAE1091BA67B8000E83E5B /* XMPPStringPrep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPStringPrep.m; sourceTree = "<group>"; };
 		F9FAE10A1BA67B8000E83E5B /* XMPPTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPTimer.h; sourceTree = "<group>"; };
 		F9FAE10B1BA67B8000E83E5B /* XMPPTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPTimer.m; sourceTree = "<group>"; };
-		F9FAE1271BA67BBC00E83E5B /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
 		F9FAE12B1BA67C0700E83E5B /* XMPPBandwidthMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPBandwidthMonitor.h; sourceTree = "<group>"; };
 		F9FAE12C1BA67C0700E83E5B /* XMPPBandwidthMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPBandwidthMonitor.m; sourceTree = "<group>"; };
 		F9FAE12E1BA67C0700E83E5B /* XMPPCoreDataStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPCoreDataStorage.h; sourceTree = "<group>"; };
@@ -514,8 +517,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9FAE1281BA67BBC00E83E5B /* libresolv.dylib in Frameworks */,
-				F9FAE0A71BA6775F00E83E5B /* libxml2.dylib in Frameworks */,
+				F9BEC2151BB8ED87001E9663 /* libresolv.tbd in Frameworks */,
+				F9BEC2131BB8ED76001E9663 /* libxml2.tbd in Frameworks */,
 				F9FAE0C31BA67ACC00E83E5B /* libidn.a in Frameworks */,
 				F9FAE0A51BA6769E00E83E5B /* CFNetwork.framework in Frameworks */,
 				F9FAE0A31BA6769400E83E5B /* Security.framework in Frameworks */,
@@ -573,6 +576,8 @@
 			isa = PBXGroup;
 			children = (
 				F9E09A181BA811F8004D5F7D /* Singleton.h */,
+				F9DF3FE61C84290D00F7705C /* HttpTool.h */,
+				F9DF3FE71C84290D00F7705C /* HttpTool.m */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -764,8 +769,8 @@
 		F9FAE0C41BA67AFA00E83E5B /* Framework */ = {
 			isa = PBXGroup;
 			children = (
-				F9FAE1271BA67BBC00E83E5B /* libresolv.dylib */,
-				F9FAE0A61BA6775F00E83E5B /* libxml2.dylib */,
+				F9BEC2141BB8ED87001E9663 /* libresolv.tbd */,
+				F9BEC2121BB8ED76001E9663 /* libxml2.tbd */,
 				F9FAE0A41BA6769E00E83E5B /* CFNetwork.framework */,
 				F9FAE0A21BA6769400E83E5B /* Security.framework */,
 			);
@@ -1766,6 +1771,7 @@
 				F90EEE891BABDB6500E38F7C /* TBXmppManager.m in Sources */,
 				F9FAE24A1BA67C0800E83E5B /* XMPPRoomMemoryStorage.m in Sources */,
 				F9FAE11E1BA67B8000E83E5B /* XMPPPresence.m in Sources */,
+				F9DF3FE81C84290D00F7705C /* HttpTool.m in Sources */,
 				F9FAE27A1BA67C0800E83E5B /* XMPPMessageDeliveryReceipts.m in Sources */,
 				F9FAE0451BA6734B00E83E5B /* AppDelegate.m in Sources */,
 				F9E09A191BA811F8004D5F7D /* NSArray+Log.m in Sources */,
@@ -1919,7 +1925,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SimpleXmpp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1933,7 +1941,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SimpleXmpp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

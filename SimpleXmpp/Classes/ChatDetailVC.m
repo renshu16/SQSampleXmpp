@@ -221,6 +221,8 @@
 {
     UIImage *image = info[UIImagePickerControllerEditedImage];
     [self dismissViewControllerAnimated:YES completion:^{
+        
+        //1.将图片Base64编码为NSString进行传输
         //发送文件Message
         XMPPMessage *fileMessage = [XMPPMessage messageWithType:@"myImageData" to:[XMPPJID jidWithString:_bareJid]];
         
@@ -231,6 +233,11 @@
         [fileMessage addChild:fileElement];
         [[TBXmppManager sharedInstance] sendXmppMessage:fileMessage];
         NSLog(@"fileMessage -- %@",fileMessage);
+        
+        //2.上传图片到文件服务器，通过图片的url进行传输
+        
+        
+        
         /*
          自定义message
         <message type="myImageData" to="rensq@192.168.1.25">
@@ -253,7 +260,7 @@
 {
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.allowsEditing = YES;
+        //picker.allowsEditing = YES;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [picker setDelegate:self];
         [self presentViewController:picker animated:YES completion:nil];

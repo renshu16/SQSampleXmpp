@@ -123,7 +123,7 @@
     //注册
     else if (btn.tag == 2) {
         actionStr = @"注册";
-        [self appDelegate].isRegister = YES;
+        [TBXmppManager sharedInstance].isRegister = YES;
     }
     
     [[TBXmppManager sharedInstance] connectWithCompletion:^{
