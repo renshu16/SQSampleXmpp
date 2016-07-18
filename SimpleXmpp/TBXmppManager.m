@@ -102,6 +102,32 @@ static TBXmppManager *sharedManager;
     [_xmppStream sendElement:iq];
 }
 
+#pragma mark 模拟后台API回复用户 2.5接口
+-(void)sendPushRequest
+{
+    NSXMLElement * query = [NSXMLElement elementWithName:@"query" xmlns:@"jabber:iq:tbmsgreply"];
+    NSXMLElement * username = [NSXMLElement elementWithName:@"userid"];
+    [username setStringValue:@"lisi"];
+    NSXMLElement * msgid = [NSXMLElement elementWithName:@"msgid"];
+    [msgid setStringValue:@"82928"];
+    NSXMLElement * msgtype = [NSXMLElement elementWithName:@"msgtype"];
+    [msgtype setStringValue:@"1"];
+    NSXMLElement * content = [NSXMLElement elementWithName:@"content"];
+    [content setStringValue:@"c3Nzc3Nz"];
+    NSXMLElement * token = [NSXMLElement elementWithName:@"token"];
+    [token setStringValue:@"8QmTvi+aqJ9ywU+4Lr4tT5e/w7kcXhYN"];
+    [query addChild:username];
+    [query addChild:msgid];
+    [query addChild:msgtype];
+    [query addChild:content];
+    [query addChild:token];
+    
+    NSXMLElement * iq = [NSXMLElement elementWithName:@"iq"];
+    [iq addAttributeWithName:@"type" stringValue:@"get"];
+    [iq addChild:query];
+    [_xmppStream sendElement:iq];
+}
+
 #pragma mark 扩展接口
 -(void)requestHello:(NSString *)sayStr
 {
@@ -111,6 +137,27 @@ static TBXmppManager *sharedManager;
     [query addChild:body];
     [query addAttributeWithName:@"say" stringValue:sayStr];
     NSXMLElement *iq = [NSXMLElement elementWithName:@"iq"];
+    [iq addAttributeWithName:@"type" stringValue:@"get"];
+    [iq addChild:query];
+    [_xmppStream sendElement:iq];
+}
+
+#pragma mark 模拟后台API回复用户 2.8接口
+-(void)sendTBMsgRequest
+{
+
+    
+    
+    NSXMLElement * query = [NSXMLElement elementWithName:@"query" xmlns:@"jabber:iq:tbmsg"];
+    NSXMLElement * to = [NSXMLElement elementWithName:@"to"];
+    [to setStringValue:@"zhangsan"];
+    NSXMLElement * content = [NSXMLElement elementWithName:@"content"];
+    [content setStringValue:@"中文abc"];
+
+    [query addChild:to];
+    [query addChild:content];
+    
+    NSXMLElement * iq = [NSXMLElement elementWithName:@"iq"];
     [iq addAttributeWithName:@"type" stringValue:@"get"];
     [iq addChild:query];
     [_xmppStream sendElement:iq];
@@ -187,7 +234,7 @@ static TBXmppManager *sharedManager;
         return;
     }
     
-    [_xmppStream setMyJID:[XMPPJID jidWithString:myJID]];
+    [_xmppStream setMyJID:[XMPPJID jidWithString:myJID resource:@"web112233"]];
     [_xmppStream setHostName:hostName];
     
     NSError *err = nil;
@@ -338,15 +385,15 @@ static TBXmppManager *sharedManager;
     [[NSNotificationCenter defaultCenter] postNotificationName:kTBNotifyReceiveMsg object:msgDic];
 }
 
-- (XMPPMessage *)xmppStream:(XMPPStream *)sender willReceiveMessage:(XMPPMessage *)message
-{
-    NSLog(@"will接收到用户消息 - %@", message);
-    return message;
-}
+//- (XMPPMessage *)xmppStream:(XMPPStream *)sender willReceiveMessage:(XMPPMessage *)message
+//{
+//    NSLog(@"will接收到用户消息 - %@", message);
+//    return message;
+//}
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
-    NSLog(@"接收到用户登陆的状态 - %@",presence);
+    NSLog(@"didReceivePresence - %@",presence);
 }
 
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq

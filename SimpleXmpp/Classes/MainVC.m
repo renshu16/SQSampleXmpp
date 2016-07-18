@@ -35,7 +35,7 @@
     
     //self.view.backgroundColor = [UIColor yellowColor];
     self.title = @"主页";
-    cellArr = [NSArray arrayWithObjects:@"添加好友",@"聊天",@"登录", @"注销",@"检查用户",@"request hello",@"发消息",  nil];
+    cellArr = [NSArray arrayWithObjects:@"添加好友",@"聊天",@"登录", @"注销",@"检查用户",@"request hello",@"发消息",@"tbmsgreply",@"HttpRequest",  nil];
     
     
 
@@ -116,6 +116,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger rowIndex = [indexPath row];
     if (rowIndex == 0) {
         [self addFriendWithName:kFriendJid];
@@ -139,28 +140,58 @@
         [[TBXmppManager sharedInstance] requestHello:@"Hello from iOS"];
     }
     else if(rowIndex == 6){
-        [[TBXmppManager sharedInstance] sendTextMsg:@"{success:1}" toJID:kFriendJid];
+//        [[TBXmppManager sharedInstance] sendTextMsg:@"{success:1}" toJID:@"huangcheng@192.168.1.140"];
+        [[TBXmppManager sharedInstance] sendTextMsg:@"{success:1}" toJID:@"acweb_2f213adc-3480-4773-b75b-363fa8944f922222@192.168.1.51"];
+//            [[TBXmppManager sharedInstance] sendTextMsg:@"{\"success\":1}" toJID:@"acweb@broadcast.192.168.3.140"];
+    }
+    else if(rowIndex == 7){
+        [[TBXmppManager sharedInstance] sendTBMsgRequest];
+    }
+    else if(rowIndex == 8){
+        [self sendHttpRequest];
     }
 }
 
 #pragma mark - Notifycation
 -(void)didReceiveMessage:(NSNotification *)notify
 {
-    id msg = notify !=nil && notify.object !=nil ? [notify.object objectForKey:kTBNotifyMsgKey] : nil;
-    if (msg) {
-        XMPPMessage *message = (XMPPMessage *)msg;
-        
-        dispatch_queue_t mainQueue= dispatch_get_main_queue();
-        dispatch_sync(mainQueue, ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"来自openfire的消息"
-                                                            message:[NSString stringWithFormat:@"%@",message ]
-                                                           delegate:self
-                                                  cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
-        });
-        
+//    id msg = notify !=nil && notify.object !=nil ? [notify.object objectForKey:kTBNotifyMsgKey] : nil;
+//    if (msg) {
+//        XMPPMessage *message = (XMPPMessage *)msg;
+//        
+//        dispatch_queue_t mainQueue= dispatch_get_main_queue();
+//        dispatch_sync(mainQueue, ^{
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"来自openfire的消息"
+//                                                            message:[NSString stringWithFormat:@"%@",message ]
+//                                                           delegate:self
+//                                                  cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//            [alert show];
+//        });
+//        
+//
+//    }
+}
 
-    }
+-(void)sendHttpRequest
+{
+    NSString *urlString = @"http://192.168.1.140:9090/plugins/presence/status?jid=zhangsan@192.168.1.140&type=text";
+//    NSString *urlString = @"http://192.168.1.140:9090/plugins/restapi/v1/system/properties";
+    NSURL *url = [NSURL URLWithString:urlString];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSMutableURLRequest *mReq = [NSMutableURLRequest requestWithURL:url];
+//    [mReq setValue:@"Basic YWRtaW46YWRtaW4=" forHTTPHeaderField:@"Authorization"];
+//    [mReq setValue:@"application/json" forHTTPHeaderField:@"ContentType"];
+    
+    [NSURLConnection sendAsynchronousRequest:mReq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+        if (connectionError) {
+            NSLog(@"request error : %@",connectionError.localizedDescription);
+            return;
+        }
+        
+        NSDictionary *retDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"result : %@",retDict);
+        
+    }];
 }
 
 @end

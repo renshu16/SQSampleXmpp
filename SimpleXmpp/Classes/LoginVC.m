@@ -47,6 +47,7 @@
     [_userNameText setPlaceholder:@"请输入账号"];
     [_userNameText setDelegate:self];
     _userNameText.text = @"zhangsan";
+//    _userNameText.text = @"acbackend_hanxiao";
     [self.view addSubview:_userNameText];
     
     _userPasswordText = [[UITextField alloc]initWithFrame:CGRectMake(40, CGRectGetMaxY(_userNameText.frame) + kPadding, textWidth, 44)];
@@ -56,6 +57,7 @@
     _userPasswordText.secureTextEntry = YES;
     [_userPasswordText setDelegate:self];
     _userPasswordText.text = @"zhangsan";
+//    _userPasswordText.text = @"acbackend_hanxiao";
     [self.view addSubview:_userPasswordText];
     
     _hostNameText = [[UITextField alloc]initWithFrame:CGRectMake(40, CGRectGetMaxY(_userPasswordText.frame) + kPadding, textWidth, 44)];

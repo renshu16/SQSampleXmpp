@@ -17,11 +17,12 @@
 #define kTBNotifyReceiveMsg     @"kTBNotifyReceiveMsg"
 #define kTBNotifyMsgKey         @"kTBNotifyMsgKey"
 
-#define kFriendJid      @"lisi@192.168.1.140"
+//#define kFriendJid      @"lisi@192.168.3.140"
+#define kFriendJid      @"fumeng@192.168.1.51"
 
 //#define kHostName       @"wjmac.local"
 //#define kHostName       @"192.168.1.25"
-#define kHostName       @"192.168.1.140"
+#define kHostName       @"192.168.1.51"
 
 typedef void (^CompletionBlock)();
 
@@ -45,6 +46,16 @@ typedef void (^CompletionBlock)();
 -(void)sendTextMsg:(NSString *)message toJID:(NSString *)toJID;
 -(void)checkUser:(NSString*)userName;
 -(void)requestHello:(NSString *)sayStr;
+
+/**
+ *  2.5接口
+ */
+-(void)sendPushRequest;
+
+/**
+ *  2.8接口
+ */
+-(void)sendTBMsgRequest;
 
 -(void)setupStream;
 -(void)connect;
