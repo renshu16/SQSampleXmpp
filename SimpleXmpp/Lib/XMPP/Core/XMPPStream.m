@@ -2551,6 +2551,7 @@ enum XMPPStreamConfig
 {
 	if (element == nil) return;
 	
+    NSLog(@"发送消息：%@",element);
 	dispatch_block_t block = ^{ @autoreleasepool {
 		
 		if (state == STATE_XMPP_CONNECTED)
